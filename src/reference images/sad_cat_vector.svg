@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 682" width="2048" height="682">
+  <title>Sad cat face</title>
+  <g stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Head outline and ears -->
+    <path d="M686 30
+      C660 94 655 213 700 296
+      C676 343 668 397 684 447
+      C724 553 857 642 1024 648
+      C1191 642 1324 553 1364 447
+      C1380 397 1372 343 1348 296
+      C1393 213 1388 94 1362 30
+      C1300 31 1226 74 1162 139
+      C1084 108 964 108 886 139
+      C822 74 748 31 686 30 Z"
+      fill="none" stroke-width="16"/>
+
+    <!-- Inner ears -->
+    <path d="M707 84 C753 94 800 121 846 155
+      C801 181 757 216 721 253
+      C697 204 697 133 707 84 Z"
+      fill="none" stroke-width="14"/>
+    <path d="M1341 84 C1295 94 1248 121 1202 155
+      C1247 181 1291 216 1327 253
+      C1351 204 1351 133 1341 84 Z"
+      fill="none" stroke-width="14"/>
+
+    <!-- Downturned eyes -->
+    <path d="M812 381 C853 381 891 361 916 338
+      C906 374 881 400 850 401
+      C835 401 822 394 812 381 Z"
+      fill="#000" stroke-width="8"/>
+    <path d="M1236 381 C1195 381 1157 361 1132 338
+      C1142 374 1167 400 1198 401
+      C1213 401 1226 394 1236 381 Z"
+      fill="#000" stroke-width="8"/>
+
+    <!-- Nose and frown -->
+    <path d="M990 414 C992 397 1056 397 1058 414
+      C1055 439 1040 453 1024 461
+      C1008 453 993 439 990 414 Z"
+      fill="#000" stroke-width="8"/>
+    <path d="M1024 459 L1024 484" fill="none" stroke-width="14"/>
+    <path d="M1024 484 C1003 484 984 496 970 511
+      M1024 484 C1045 484 1064 496 1078 511"
+      fill="none" stroke-width="15"/>
+
+    <!-- Whiskers -->
+    <path d="M750 380 L596 356 M748 432 L596 438 M750 480 L618 516"
+      fill="none" stroke-width="18"/>
+    <path d="M1298 380 L1452 356 M1300 432 L1452 438 M1298 480 L1430 516"
+      fill="none" stroke-width="18"/>
+  </g>
+</svg>
