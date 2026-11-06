@@ -19,6 +19,7 @@
 #define LSM6DS3_CTRL10_C  0x19
 #define LSM6DS3_TAP_CFG   0x58
 #define LSM6DS3_MD1_CFG   0x5E
+#define LSM6DS3_INT1_CTRL 0x0D
 
 // Color definitions
 #define BLACK    0x0000
@@ -44,60 +45,15 @@ uint32_t fedStartTime = 0;
 const uint32_t FED_DURATION_MS = 60UL * 60UL * 1000UL; // 60 minutes
 int currentRotation = 1;
 
-// Interrupt Service Routine for the IMU
-void imuISR() {
-  imuInterruptTriggered = true;
-}
-
-// Function declarations (PlatformIO requires these if defined below setup/loop)
+void imuISR();
 void updateRotation();
-void drawScreen(const char* message);
 
-// Drawing helpers
-void thickLine(Adafruit_GFX &g, int x0, int y0,
-               int x1, int y1, int thickness) {
-  int dx = x1 - x0;
-  int dy = y1 - y0;
-  int steps = max(abs(dx), abs(dy));
-
-  for (int i = 0; i <= steps; i++) {
-    int x = x0 + (steps ? dx * i / steps : 0);
-    int y = y0 + (steps ? dy * i / steps : 0);
-    g.fillCircle(x, y, thickness / 2, BLACK);
-  }
-}
-
-// Quadratic Bezier curve
-void curve(Adafruit_GFX &g,
-           int x0, int y0,
-           int cx, int cy,
-           int x1, int y1,
-           int thickness = 6) {
-  int px = x0, py = y0;
-
-  for (int i = 1; i <= 40; i++) {
-    float t = i / 40.0;
-    float u = 1.0 - t;
-
-    int x = u*u*x0 + 2*u*t*cx + t*t*x1;
-    int y = u*u*y0 + 2*u*t*cy + t*t*y1;
-
-    thickLine(g, px, py, x, y, thickness);
-    px = x;
-    py = y;
-  }
-}
 
 void drawHappyDogFace(Adafruit_GFX &g) {
   g.fillScreen(WHITE);
 
 
 }
-
-
-
-
-
 
 static const char catFacePath[] =
   //outline
@@ -114,22 +70,6 @@ static const char catFacePath[] =
 
 static const char catEarsPath[] =
   //inner ears
-  /*"M707 84 C753 94 800 121 846 155"
-  "C801 181 757 216 721 253"
-  "C697 204 697 133 707 84 Z"     
-  "M1341 84 C1295 94 1248 121 1202 155"
-  "C1247 181 1291 216 1327 253"
-  "C1351 204 1351 133 1341 84 Z";
-
-  "M715 75 "
-  "C758 83 803 116 837 159 "
-  "C801 181 757 216 730 252 "
-  "C705 200 704 135 715 75 Z "
-  "M1339 70 "
-  "C1285 80 1238 106 1202 155 "
-  "C1247 181 1291 216 1327 253 "
-  "C1351 204 1351 133 1339 70 Z";*/
-
   "M 718 86 C 762 97 793 121 822 165 C 801 181 757 216 738 243 C 714 193 704 135 718 86 Z M 1331 84 C 1284 99 1240 127 1211 164 C 1247 181 1291 216 1313 246 C 1332 196 1337 129 1331 84 Z";
 
 static const char catSadEyesPath[] =  
@@ -304,6 +244,7 @@ void drawSadCatFace(Adafruit_GFX &g) {
 
 void setup() {
   Serial.begin(115200);
+  Serial.println("Pet feeder starting");
   
   // Initialize Display
   display.init(115200, true, 2, false);
@@ -315,15 +256,45 @@ void setup() {
     Serial.println("IMU Error");
   }
 
+  //gyroscope can be powered off to save power, we only need the accelerometer for orientation detection
+  myIMU.settings.accelEnabled = 1; // Enable accelerometer
+  myIMU.settings.gyroEnabled = 0; // Disable gyroscope
+
+  //config INT1_CTRL register to route significant motion/tilt interrupt to INT1
+  //
+
   // Configure IMU for motion/tilt detection routing to INT1
   pinMode(PIN_LSM6DS3TR_C_INT1, INPUT_PULLUP);
+
   attachInterrupt(digitalPinToInterrupt(PIN_LSM6DS3TR_C_INT1), imuISR, RISING);
 
   // Write IMU registers to trigger interrupt on significant motion/tilt
-  myIMU.writeRegister(LSM6DS3_CTRL1_XL, 0x50); 
-  myIMU.writeRegister(LSM6DS3_TAP_CFG, 0x0E);  
-  myIMU.writeRegister(LSM6DS3_CTRL10_C, 0x38); 
-  myIMU.writeRegister(LSM6DS3_MD1_CFG, 0x02);  
+  // Enable accelerometer at 26 Hz, ±2g
+  myIMU.writeRegister(LSM6DS3_CTRL1_XL, 0x60); //
+
+  myIMU.writeRegister(LSM6DS3_TAP_CFG, 0x80); // Enable significant motion detection
+#define LSM6DS3_TAP_THS_6D 0x59
+  myIMU.writeRegister(LSM6DS3_TAP_THS_6D, 0x40); //60 degree threshold 0x60 for 50 degree 0x20 for 70 0x00 for 80 degree
+#define LSM6DS3_CTRL8_XL 0x17
+  myIMU.writeRegister(LSM6DS3_CTRL8_XL, 0x01); //enable LPF2 for 6D detection
+  myIMU.writeRegister(LSM6DS3_MD1_CFG, 0x04); // Route significant motion interrupt to INT1
+
+  // Enable embedded function Bank A
+  #define LSM6DS3_FUNC_CFG_ACCESS 0x01
+  //myIMU.writeRegister(LSM6DS3_FUNC_CFG_ACCESS, 0x01);
+  //configure significant motion detection threshold
+  #define LSM6DS3_SM_THS 0x13
+  //myIMU.writeRegister(LSM6DS3_SM_THS, 0x06); //default value 
+  // disable embedded function Bank A
+  //myIMU.writeRegister(LSM6DS3_FUNC_CFG_ACCESS, 0x00);
+
+  // Enable embedded functions + significant motion
+  //myIMU.writeRegister(LSM6DS3_CTRL10_C, 0x05); 
+  
+  // Route significant motion interrupt to INT1 
+  //myIMU.writeRegister(LSM6DS3_INT1_CTRL, 0x40);
+  
+  
 
   // Initial Boot Sequence
   updateRotation();
@@ -335,27 +306,40 @@ void setup() {
   } while (display.nextPage());
   fedStartTime = millis();
   isFed = true;
+  Serial.println("Pet feeder ready");
 }
 
 
 
 
 void loop() {
+  
+
+  /*if (isFed && (millis() - fedStartTime >= FED_DURATION_MS)) {
+    isFed = false;
+    //drawScreen("Animals Hungry");
+  }*/
+
+  delay(1000); 
+  updateRotation();
   if (imuInterruptTriggered) {
     imuInterruptTriggered = false;
     delay(100); 
-    updateRotation();
-    drawScreen("Animals Fed");
-    fedStartTime = millis();
-    isFed = true;
-  }
+    //updateRotation();
+    //if(isFed){
 
-  if (isFed && (millis() - fedStartTime >= FED_DURATION_MS)) {
-    isFed = false;
-    //drawScreen("Animals Hungry");
+    //}
+    //fedStartTime = millis();
+    //isFed = true;
+    display.setRotation(currentRotation);
+    display.setFullWindow();
+    display.firstPage();
+    do {
+      drawHappyCatFace(display);
+    } while (display.nextPage());
   }
-
-  delay(100); 
+  Serial.print("Current Rotation: ");
+  Serial.println(currentRotation);
 }
 
 void updateRotation() {
@@ -371,19 +355,22 @@ void updateRotation() {
   }
 }
 
-void drawScreen(const char* message) {
-  display.setRotation(currentRotation);
+
+// Interrupt Service Routine for the IMU
+void imuISR() {
+  imuInterruptTriggered = true;
+  Serial.print("IMU Interrupt Triggered.");
+
+  //updateRotation();
+  
+  //Serial.print("Current Rotation: ");
+  //Serial.println(currentRotation);
+
+  /*display.setRotation(currentRotation);
   display.setFullWindow();
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
-    
-    int16_t tbx, tby; uint16_t tbw, tbh;
-    display.getTextBounds(message, 0, 0, &tbx, &tby, &tbw, &tbh);
-    uint16_t x = ((display.width() - tbw) / 2) - tbx;
-    uint16_t y = ((display.height() - tbh) / 2) - tby;
-    
-    display.setCursor(x, y);
-    display.print(message);
-  } while (display.nextPage());
+    drawHappyCatFace(display);
+  } while (display.nextPage());*/
+
 }
