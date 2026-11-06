@@ -95,110 +95,99 @@ void drawHappyDogFace(Adafruit_GFX &g) {
 }
 
 
+
+
+
+
+static const char catFacePath[] =
+  //outline
+  "M686 30"
+  "C660 94 655 213 700 296"
+  "C676 343 668 397 684 447"
+  "C724 553 857 642 1024 648"
+  "C1191 642 1324 553 1364 447"
+  "C1380 397 1372 343 1348 296"
+  "C1393 213 1388 94 1362 30"
+  "C1300 31 1226 74 1162 139"
+  "C1084 108 964 108 886 139"
+  "C822 74 748 31 686 30 Z";
+
+static const char catEarsPath[] =
+  //inner ears
+  /*"M707 84 C753 94 800 121 846 155"
+  "C801 181 757 216 721 253"
+  "C697 204 697 133 707 84 Z"     
+  "M1341 84 C1295 94 1248 121 1202 155"
+  "C1247 181 1291 216 1327 253"
+  "C1351 204 1351 133 1341 84 Z";
+
+  "M715 75 "
+  "C758 83 803 116 837 159 "
+  "C801 181 757 216 730 252 "
+  "C705 200 704 135 715 75 Z "
+  "M1339 70 "
+  "C1285 80 1238 106 1202 155 "
+  "C1247 181 1291 216 1327 253 "
+  "C1351 204 1351 133 1339 70 Z";*/
+
+  "M 718 86 C 762 97 793 121 822 165 C 801 181 757 216 738 243 C 714 193 704 135 718 86 Z M 1331 84 C 1284 99 1240 127 1211 164 C 1247 181 1291 216 1313 246 C 1332 196 1337 129 1331 84 Z";
+
+static const char catSadEyesPath[] =  
+  //eyes
+  "M812 381 C853 381 891 361 916 338"
+  "C906 374 881 400 850 401"
+  "C835 401 822 394 812 381 Z"
+  "M1236 381 C1195 381 1157 361 1132 338"
+  "C1142 374 1167 400 1198 401"
+  "C1213 401 1226 394 1236 381 Z";
+
+static const char catNosePath[] =
+  //Nose
+  "M990 414 C992 397 1056 397 1058 414"
+  "C1055 439 1040 453 1024 461"
+  "C1008 453 993 439 990 414 Z";  
+
+static const char catSadMouthPath[] =
+  //Mouth
+  "M1024 459 L1024 484"
+  "M1024 484 C1003 484 984 496 970 511"
+  "M1024 484 C1045 484 1064 496 1078 511";
+
+static const char catWhiskersPath[] =
+  //whiskers
+  "M750 380 "
+  "L596 356 "
+  "M748 432 "
+  "L596 438 "
+  "M750 480 "
+  "L618 516"
+  "M1298 380 "
+  "L1452 356 "
+  "M1300 432 "
+  "L1452 438 "
+  "M1298 480 "
+  "L1430 516";
+
+static const char catHappyEyesPath[] =  
+  //eyes
+  //closed eyes
+  "M325 345 C327 310 351 286 382 286 "
+  "C414 286 438 310 440 345"
+  "M560 345 C562 310 586 286 618 286 "
+  "C649 286 673 310 675 345";
+
+static const char catNosePath2[] =
+  //Nose
+  "M478 365 C480 351 520 351 522 365 "
+  "C520 388 508 404 500 408 "
+  "C492 404 480 388 478 365 Z"; //fill="#111111" stroke="#111111"
+  
+static const char catHappyMouthPath[] =
+  //Mouth
+  "M500 408 C500 447 476 466 450 466 C426 466 410 449 410 427"
+  "M500 408 C500 447 524 466 550 466 C574 466 590 449 590 427";
+
 void drawHappyCatFace(Adafruit_GFX &g) {
-  static const char catFacePath[] =
-      //outline
-      "M205 310 "
-      "C188 260 185 185 207 93 "
-      "C212 73 220 55 231 43 "
-      "C284 51 348 83 402 132 "
-      "C464 110 536 110 598 132 "
-      "C652 83 716 51 769 43 "
-      "C780 55 788 73 793 93 "
-      "C815 185 812 260 795 310 "
-      "C815 355 815 410 794 460 "
-      "C752 560 630 625 500 625 "
-      "C370 625 248 560 206 460 "
-      "C185 410 185 355 205 310 Z"
-      
-      //inner ears
-      "M236 117 C280 126 324 151 363 181"
-      "L249 270 C231 224 229 166 236 117 Z"      
-      "M764 117 C720 126 676 151 637 181"
-      "L751 270 C769 224 771 166 764 117 Z"
-      
-      //closed eyes
-      "M325 345 C327 310 351 286 382 286 "
-      "C414 286 438 310 440 345"
-      "M560 345 C562 310 586 286 618 286 "
-      "C649 286 673 310 675 345"
-    
-      //Nose
-      "M478 365 C480 351 520 351 522 365 "
-      "C520 388 508 404 500 408 "
-      "C492 404 480 388 478 365 Z" //fill="#111111" stroke="#111111"
-      
-      //Mouth
-      "M500 408 C500 447 476 466 450 466 C426 466 410 449 410 427"
-      "M500 408 C500 447 524 466 550 466 C574 466 590 449 590 427"
-
-      //whiskers
-      "M205 355 L110 340 M205 394 L105 394 M210 432 L125 474"
-      "M795 355 L890 340 M795 394 L895 394 M790 432 L875 474";
-
-  g.fillScreen(GxEPD_WHITE);
-  gfxDraw::pathByText(
-      catFacePath, -30, 20, 25,
-      [&](int16_t x, int16_t y) {
-        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
-          g.fillCircle(x, y, 3, GxEPD_BLACK);
-        }
-      },
-      nullptr);
-}
-
-void drawSadCatFace(Adafruit_GFX &g) {
-  static const char catFacePath[] =
-      //outline
-      "M686 30"
-      "C660 94 655 213 700 296"
-      "C676 343 668 397 684 447"
-      "C724 553 857 642 1024 648"
-      "C1191 642 1324 553 1364 447"
-      "C1380 397 1372 343 1348 296"
-      "C1393 213 1388 94 1362 30"
-      "C1300 31 1226 74 1162 139"
-      "C1084 108 964 108 886 139"
-      "C822 74 748 31 686 30 Z"
-      
-      //inner ears
-      "M707 84 C753 94 800 121 846 155"
-      "C801 181 757 216 721 253"
-      "C697 204 697 133 707 84 Z"     
-      "M1341 84 C1295 94 1248 121 1202 155"
-      "C1247 181 1291 216 1327 253"
-      "C1351 204 1351 133 1341 84 Z"
-      
-      //eyes
-      "M812 381 C853 381 891 361 916 338"
-      "C906 374 881 400 850 401"
-      "C835 401 822 394 812 381 Z"
-      "M1236 381 C1195 381 1157 361 1132 338"
-      "C1142 374 1167 400 1198 401"
-      "C1213 401 1226 394 1236 381 Z"
-    
-      //Nose
-      "M990 414 C992 397 1056 397 1058 414"
-      "C1055 439 1040 453 1024 461"
-      "C1008 453 993 439 990 414 Z"
-      "M1024 459 L1024 484"
-      "M1024 484 C1003 484 984 496 970 511"
-      "M1024 484 C1045 484 1064 496 1078 511"
-
-      //whiskers
-      "M750 380 "
-      "L596 356 "
-      "M748 432 "
-      "L596 438 "
-      "M750 480 "
-      "L618 516"
-      "M1298 380 "
-      "L1452 356 "
-      "M1300 432 "
-      "L1452 438 "
-      "M1298 480 "
-      "L1430 516";
-
   g.fillScreen(GxEPD_WHITE);
   gfxDraw::pathByText(
       catFacePath, -125, 30, 22,
@@ -207,17 +196,111 @@ void drawSadCatFace(Adafruit_GFX &g) {
           g.fillCircle(x, y, 3, GxEPD_BLACK);
         }
       },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_YELLOW); });
+
+  gfxDraw::pathByText(
+      catEarsPath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_BLACK); });
+
+  gfxDraw::pathByText(
+      catHappyEyesPath, -10, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      nullptr);
+
+  gfxDraw::pathByText(
+      catNosePath2, -10, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_BLACK); });
+  
+  gfxDraw::pathByText(
+      catHappyMouthPath, -10, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      nullptr);
+
+  gfxDraw::pathByText(
+      catWhiskersPath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
       nullptr);
 }
 
-static const uint8_t image_paint_2_bits[] = {0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x08,0x00,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x20,0x00,0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x0c,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x60,0x00,0x06,0x00,0x00,0x00,0x00,0x00,0x00,0x1e,0x00,0x38,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0xff,0xc0,0x00};
+void drawSadCatFace(Adafruit_GFX &g) { 
+  g.fillScreen(GxEPD_WHITE);
+  gfxDraw::pathByText(
+      catFacePath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_YELLOW); });
 
-void drawScreen_1(Adafruit_GFX &g) {
-    g.fillScreen(0x0);
+  gfxDraw::pathByText(
+      catEarsPath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_BLACK); });
 
-    // paint 2
-    g.drawBitmap(31, 85, image_paint_2_bits, 69, 65, 0xFFFF);
+  gfxDraw::pathByText(
+      catSadEyesPath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_BLACK); });
+
+  gfxDraw::pathByText(
+      catNosePath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      [&](int16_t x, int16_t y) { g.drawPixel(x, y, GxEPD_BLACK); });
+
+  gfxDraw::pathByText(
+      catSadMouthPath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      nullptr);
+
+  gfxDraw::pathByText(
+      catWhiskersPath, -125, 30, 22,
+      [&](int16_t x, int16_t y) {
+        if (y != POINT_BREAK_Y && y != POINT_INVALID_Y) {
+          g.fillCircle(x, y, 3, GxEPD_BLACK);
+        }
+      },
+      nullptr);
 }
+
 
 void setup() {
   Serial.begin(115200);
@@ -248,7 +331,7 @@ void setup() {
   display.setFullWindow();
   display.firstPage();
   do {
-    drawSadCatFace(display);
+    drawHappyCatFace(display);
   } while (display.nextPage());
   fedStartTime = millis();
   isFed = true;
